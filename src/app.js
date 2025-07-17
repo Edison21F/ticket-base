@@ -254,6 +254,17 @@ app.use('/rol', require('./router/rol.router'));
 app.use('/detalleRol', require('./router/detalleRol.router'));
 app.use('/cliente', require('./router/cliente.router'));
 app.use('/usuario', require('./router/user.router'));
+app.use('/cinema', require('./router/cinema.router'));
+app.use('/concert', require('./router/concert.router'));
+app.use('/transport', require('./router/transport.router'));
+app.use('/events', require('./router/events.router'));
+app.use('/products', require('./router/products.router'));
+app.use('/transactions', require('./router/transactions.router'));
+app.use('/reservations', require('./router/reservations.router'));
+app.use('/genero', require('./router/genre.router'));
+app.use('/classification', require('./router/classifications.router'));
+app.use('/city', require('./router/city.router'));
+app.use('/country', require('./router/country.router'));
 
 // Configurar variables globales
 app.use((req, res, next) => {

@@ -3,4 +3,4 @@ node_modules
 combined.log
 error.log
 
-src/logs/app.log
+src/logs/app.log 

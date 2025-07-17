@@ -6,7 +6,7 @@ mongoose.connection.on('connected', () => {
   console.log('✅ Mongoose conectado a MongoDB en:', mongoose.connection.host);
 });
 
-mongoose.connection.on('error', (err) => {
+mongoose.connection.on('error', (err) => { 
   console.error('❌ Error de conexión en Mongoose:', err);
 });
 
