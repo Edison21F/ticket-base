@@ -92,6 +92,7 @@ const transportSeatModel = require('../models/sql/transportSeats');
 const transportReservationModel = require('../models/sql/transportReservations');
 const staffModel = require('../models/sql/staff');
 const staffAssignmentModel = require('../models/sql/staffAssignments');
+const clienteModel = require('../models/sql/cliente');
 
 
 
@@ -130,6 +131,8 @@ const TransportSeat = transportSeatModel(sequelize, Sequelize);
 const TransportReservation = transportReservationModel(sequelize, Sequelize);
 const Staff = staffModel(sequelize, Sequelize);
 const StaffAssignment = staffAssignmentModel(sequelize, Sequelize);
+const cliente = clienteModel(sequelize, Sequelize);
+
 
 //relaciones o foreingKeys
 
@@ -248,38 +251,39 @@ Transaction.belongsTo(usuario, { foreignKey: 'usuarioId' });
 
 // Exportar el objeto sequelize
 module.exports = {
-  usuario,
-  rol,
-  detalleRol,
-  page,
-  Country,
-  City,
-  Cinema,
-  Movie,
-  Genre,
-  Classification,
-  Room,
-  Seat,
-  Function,
-  Reservation,
-  ReservedSeat,
-  ProductCategory,
-  Product,
-  Transaction,
-  Event,
-  Ticket,
-  Artist,     
-  ConcertVenue,
-  Concert,
-  ConcertSection,
-  ConcertSeat,
-  ConcertReservation,
-  TransportCompany,
-  TransportRoute,
-  TransportVehicle,
-  TransportSchedule,
-  TransportSeat,
-  TransportReservation,
-  Staff,
-  StaffAssignment
+    usuario,
+    rol,
+    detalleRol,
+    page,
+    Country,
+    City,
+    Cinema,
+    Movie,
+    Genre,
+    Classification,
+    Room,
+    Seat,
+    Function,
+    Reservation,
+    ReservedSeat,
+    ProductCategory,
+    Product,
+    Transaction,
+    Event,
+    Ticket,
+    Artist,
+    ConcertVenue,
+    Concert,
+    ConcertSection,
+    ConcertSeat,
+    ConcertReservation,
+    TransportCompany,
+    TransportRoute,
+    TransportVehicle,
+    TransportSchedule,
+    TransportSeat,
+    TransportReservation,
+    Staff,
+    StaffAssignment,
+    cliente,
 };
