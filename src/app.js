@@ -265,6 +265,7 @@ app.use('/genero', require('./router/genre.router'));
 app.use('/classification', require('./router/classifications.router'));
 app.use('/city', require('./router/city.router'));
 app.use('/country', require('./router/country.router'));
+app.use('/staff', require('./router/staff.router'));
 
 // Configurar variables globales
 app.use((req, res, next) => {

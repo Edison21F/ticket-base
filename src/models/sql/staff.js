@@ -1,5 +1,5 @@
 const staff = (sequelize, type) => {
-    return sequelize.define('staff', {
+    return sequelize.define('staffs', {
         idStaff: {
             type: type.INTEGER,
             autoIncrement: true,

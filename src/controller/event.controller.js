@@ -107,9 +107,10 @@ eventsCtl.mostrarEventos = async (req, res) => {
 };
 
 // Crear nuevo evento general
+
 eventsCtl.crearEvento = async (req, res) => {
     try {
-        const { 
+        const {
             nameEvent, descriptionEvent, eventType, microserviceEventId,
             venue, dateTimeEvent, capacity, imageUrl, createdBy
         } = req.body;
@@ -123,6 +124,19 @@ eventsCtl.crearEvento = async (req, res) => {
             return res.status(400).json({ message: 'Tipo de evento inválido' });
         }
 
+        const rawDateTime = decodeURIComponent(dateTimeEvent);
+        const dateTime = new Date(rawDateTime);
+        // Validar fecha y hora
+        if (isNaN(dateTime.getTime())) {
+            return res.status(400).json({ message: 'Fecha y hora no válidas' });
+        }
+
+
+        if (isNaN(dateTime.getTime())) {
+            return res.status(400).json({ message: 'Fecha y hora no válidas' });
+        }
+
+
         // Crear evento maestro
         const nuevoEvento = await orm.Event.create({
             nameEvent: cifrarDatos(nameEvent),
@@ -130,7 +144,7 @@ eventsCtl.crearEvento = async (req, res) => {
             eventType: eventType,
             microserviceEventId: microserviceEventId.toString(),
             venue: cifrarDatos(venue || ''),
-            dateTimeEvent: new Date(dateTimeEvent),
+            dateTimeEvent: dateTime, // Usar la fecha validada
             capacity: parseInt(capacity) || 0,
             statusEvent: 'published',
             imageUrl: imageUrl || '',
@@ -139,19 +153,20 @@ eventsCtl.crearEvento = async (req, res) => {
             createEvent: new Date().toLocaleString(),
         });
 
-        return res.status(201).json({ 
+        return res.status(201).json({
             message: 'Evento creado exitosamente',
             idEvent: nuevoEvento.idEvent
         });
 
     } catch (error) {
         console.error('Error al crear evento:', error);
-        return res.status(500).json({ 
-            message: 'Error al crear el evento', 
-            error: error.message 
+        return res.status(500).json({
+            message: 'Error al crear el evento',
+            error: error.message
         });
     }
 };
+
 
 // ================ GESTIÓN DE TICKETS UNIFICADOS ================
 
@@ -241,8 +256,8 @@ eventsCtl.mostrarTicketsUsuario = async (req, res) => {
 // Crear ticket unificado
 eventsCtl.crearTicket = async (req, res) => {
     try {
-        const { 
-            eventId, usuarioId, microserviceTicketId, ticketType, 
+        const {
+            eventId, usuarioId, microserviceTicketId, ticketType,
             priceTicket, statusTicket
         } = req.body;
 
@@ -271,7 +286,7 @@ eventsCtl.crearTicket = async (req, res) => {
             createTicket: new Date().toLocaleString(),
         });
 
-        return res.status(201).json({ 
+        return res.status(201).json({
             message: 'Ticket creado exitosamente',
             idTicket: nuevoTicket.idTicket,
             ticketCode: ticketCode,
@@ -280,9 +295,9 @@ eventsCtl.crearTicket = async (req, res) => {
 
     } catch (error) {
         console.error('Error al crear ticket:', error);
-        return res.status(500).json({ 
-            message: 'Error al crear el ticket', 
-            error: error.message 
+        return res.status(500).json({
+            message: 'Error al crear el ticket',
+            error: error.message
         });
     }
 };
@@ -497,7 +512,7 @@ eventsCtl.obtenerStaffEventos = async (req, res) => {
 // Asignar personal a evento
 eventsCtl.asignarStaffEvento = async (req, res) => {
     try {
-        const { 
+        const {
             staffId, assignmentType, assignmentDate, startTime, endTime,
             locationAssignment, responsibilitiesAssignment
         } = req.body;
@@ -521,16 +536,16 @@ eventsCtl.asignarStaffEvento = async (req, res) => {
             createAssignment: new Date().toLocaleString(),
         });
 
-        return res.status(201).json({ 
+        return res.status(201).json({
             message: 'Personal asignado exitosamente',
             idAssignment: nuevaAsignacion.idStaffAssignment
         });
 
     } catch (error) {
         console.error('Error al asignar personal:', error);
-        return res.status(500).json({ 
-            message: 'Error al asignar personal', 
-            error: error.message 
+        return res.status(500).json({
+            message: 'Error al asignar personal',
+            error: error.message
         });
     }
 };

@@ -13,32 +13,30 @@ const dbConfig = {
     const connection = await mysql.createConnection(dbConfig);
     console.log('✅ Conectado a la base de datos');
 
-    // Desactivar claves foráneas
-    await connection.query('SET FOREIGN_KEY_CHECKS = 0');
-
-    // Obtener todas las tablas
+    // Verificar si existe la tabla staff
     const [tables] = await connection.query(`
       SELECT table_name 
       FROM information_schema.tables 
-      WHERE table_schema = ?
-    `, [dbConfig.database]);
+      WHERE table_schema = 'tickets' AND table_name IN ('staff', 'staffAssignments')
+    `);
+
+    console.log('Tablas relacionadas con staff encontradas:', tables);
 
     if (tables.length === 0) {
-      console.log('⚠️ No hay tablas para eliminar.');
+      console.log('❌ No existen las tablas de staff');
+      console.log('💡 Ejecuta el script SQL proporcionado');
     } else {
-      // Borrar cada tabla
-      for (const row of tables) {
-        const tableName = row.table_name;
-        await connection.query(`DROP TABLE IF EXISTS \`${tableName}\``);
-        console.log(`🗑️ Tabla eliminada: ${tableName}`);
+      console.log('✅ Tablas de staff encontradas');
+      
+      // Verificar estructura
+      for (const table of tables) {
+        console.log(`\n📋 Estructura de ${table.table_name}:`);
+        const [columns] = await connection.query(`DESCRIBE ${table.table_name}`);
+        console.table(columns);
       }
     }
 
-    // Reactivar claves foráneas
-    await connection.query('SET FOREIGN_KEY_CHECKS = 1');
-
     await connection.end();
-    console.log('✅ Tablas eliminadas y conexión cerrada');
   } catch (err) {
     console.error('❌ Error:', err.message);
   }

@@ -387,7 +387,8 @@ transportCtl.obtenerHorariosVehiculo = async (req, res) => {
     }
 };
 
-// Crear nuevo horario
+
+// Crear nuevo horario - VERSIÓN CORREGIDA
 transportCtl.crearHorario = async (req, res) => {
     try {
         const { 
@@ -400,6 +401,38 @@ transportCtl.crearHorario = async (req, res) => {
             return res.status(400).json({ message: 'Vehículo, ruta, horarios y precio son obligatorios' });
         }
 
+        // Validar y procesar fechas
+        let departureDateParsed, arrivalDateParsed;
+        
+        try {
+            // Decodificar URLs si es necesario
+            const decodedDepartureTime = decodeURIComponent(departureTime);
+            const decodedArrivalTime = decodeURIComponent(arrivalTime);
+            
+            
+            // Intentar parsear las fechas
+            departureDateParsed = new Date(decodedDepartureTime);
+            arrivalDateParsed = new Date(decodedArrivalTime);
+            
+            // Verificar que las fechas son válidas
+            if (isNaN(departureDateParsed.getTime()) || isNaN(arrivalDateParsed.getTime())) {
+                throw new Error('Fechas inválidas');
+            }
+            
+            // Verificar que la fecha de llegada es posterior a la de salida
+            if (arrivalDateParsed <= departureDateParsed) {
+                return res.status(400).json({ 
+                    message: 'La hora de llegada debe ser posterior a la hora de salida' 
+                });
+            }
+            
+        } catch (dateError) {
+            return res.status(400).json({ 
+                message: 'Formato de fecha inválido. Use: YYYY-MM-DD HH:MM:SS o YYYY-MM-DDTHH:MM:SS',
+                ejemplo: '2024-07-20 14:30:00 o 2024-07-20T14:30:00'
+            });
+        }
+
         // Verificar que el vehículo existe
         const [vehiculoExiste] = await sql.promise().query(
             'SELECT capacity FROM transportVehicles WHERE idTransportVehicle = ? AND stateVehicle = 1',
@@ -410,12 +443,41 @@ transportCtl.crearHorario = async (req, res) => {
             return res.status(404).json({ message: 'Vehículo no encontrado' });
         }
 
-        // Crear horario
+        // Verificar que la ruta existe
+        const [rutaExiste] = await sql.promise().query(
+            'SELECT idTransportRoute FROM transportRoutes WHERE idTransportRoute = ? AND stateRoute = 1',
+            [routeId]
+        );
+
+        if (rutaExiste.length === 0) {
+            return res.status(404).json({ message: 'Ruta no encontrada' });
+        }
+
+        // Verificar conflictos de horario para el mismo vehículo
+        const [conflictoHorario] = await sql.promise().query(`
+            SELECT idTransportSchedule FROM transportSchedules 
+            WHERE vehicleId = ? 
+            AND stateSchedule = 1 
+            AND (
+                (? BETWEEN departureTime AND arrivalTime) OR
+                (? BETWEEN departureTime AND arrivalTime) OR
+                (departureTime BETWEEN ? AND ?) OR
+                (arrivalTime BETWEEN ? AND ?)
+            )
+        `, [vehicleId, departureDateParsed, arrivalDateParsed, departureDateParsed, arrivalDateParsed, departureDateParsed, arrivalDateParsed]);
+
+        if (conflictoHorario.length > 0) {
+            return res.status(400).json({ 
+                message: 'El vehículo ya tiene un horario programado en ese rango de tiempo' 
+            });
+        }
+
+        // Crear horario con fechas válidas
         const nuevoHorario = await orm.TransportSchedule.create({
             vehicleId: parseInt(vehicleId),
             routeId: parseInt(routeId),
-            departureTime: new Date(departureTime),
-            arrivalTime: new Date(arrivalTime),
+            departureTime: departureDateParsed,
+            arrivalTime: arrivalDateParsed,
             priceSchedule: parseFloat(priceSchedule),
             availableSeats: availableSeats || vehiculoExiste[0].capacity,
             statusSchedule: 'scheduled',
@@ -429,7 +491,13 @@ transportCtl.crearHorario = async (req, res) => {
 
         return res.status(201).json({ 
             message: 'Horario creado exitosamente',
-            idSchedule: nuevoHorario.idTransportSchedule
+            idSchedule: nuevoHorario.idTransportSchedule,
+            horario: {
+                salida: departureDateParsed.toISOString(),
+                llegada: arrivalDateParsed.toISOString(),
+                precio: parseFloat(priceSchedule),
+                asientosDisponibles: availableSeats || vehiculoExiste[0].capacity
+            }
         });
 
     } catch (error) {
@@ -559,7 +627,7 @@ transportCtl.obtenerReservasHorario = async (req, res) => {
     }
 };
 
-// Crear nueva reserva de transporte
+// Crear nueva reserva de transporte - VERSIÓN CORREGIDA
 transportCtl.crearReservaTransporte = async (req, res) => {
     try {
         const { 
@@ -573,20 +641,71 @@ transportCtl.crearReservaTransporte = async (req, res) => {
             return res.status(400).json({ message: 'Usuario, horario, pasajero, email y precio son obligatorios' });
         }
 
-        // Generar código de reserva único
-        const reservationCode = 'TRP-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        // Verificar que el usuario existe
+        const [usuarioExiste] = await sql.promise().query(
+            'SELECT idUser FROM users WHERE idUser = ? AND stateUser = "active"',
+            [usuarioId]
+        );
+
+        if (usuarioExiste.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        // Verificar horario y disponibilidad
+        const [horario] = await sql.promise().query(`
+            SELECT ts.*, tv.vehicleCode, tv.capacity, tr.routeName, tr.origin, tr.destination, tc.nameCompany
+            FROM transportSchedules ts
+            JOIN transportVehicles tv ON ts.vehicleId = tv.idTransportVehicle
+            JOIN transportRoutes tr ON tv.routeId = tr.idTransportRoute
+            JOIN transportCompanies tc ON tr.companyId = tc.idTransportCompany
+            WHERE ts.idTransportSchedule = ? AND ts.stateSchedule = 1
+        `, [scheduleId]);
+
+        if (horario.length === 0) {
+            return res.status(404).json({ message: 'Horario no encontrado' });
+        }
+
+        const horarioData = horario[0];
+
+        if (horarioData.availableSeats <= 0) {
+            return res.status(400).json({ message: 'No hay asientos disponibles en este horario' });
+        }
 
         // Verificar disponibilidad del asiento si se especifica
         if (seatId) {
+            // Verificar que el asiento existe y pertenece al vehículo correcto
+            const [asientoExiste] = await sql.promise().query(`
+                SELECT ts.idTransportSeat, ts.seatNumber, ts.seatClass 
+                FROM transportSeats ts
+                WHERE ts.idTransportSeat = ? AND ts.vehicleId = ? AND ts.stateSeat = 1
+            `, [seatId, horarioData.vehicleId]);
+
+            if (asientoExiste.length === 0) {
+                return res.status(404).json({ 
+                    message: 'Asiento no encontrado para este vehículo',
+                    vehicleId: horarioData.vehicleId,
+                    seatId: seatId,
+                    sugerencia: `Obtén los asientos disponibles en: GET /transport/vehiculos/${horarioData.vehicleId}/asientos`
+                });
+            }
+
+            // Verificar que el asiento no esté ocupado
             const [asientoOcupado] = await sql.promise().query(`
-                SELECT idTransportReservation FROM transportReservations 
-                WHERE seatId = ? AND statusReservation IN ('confirmed', 'checked_in', 'boarded')
+                SELECT tr.idTransportReservation 
+                FROM transportReservations tr
+                WHERE tr.seatId = ? AND tr.statusReservation IN ('confirmed', 'checked_in', 'boarded')
             `, [seatId]);
 
             if (asientoOcupado.length > 0) {
-                return res.status(400).json({ message: 'El asiento seleccionado ya está ocupado' });
+                return res.status(400).json({ 
+                    message: 'El asiento seleccionado ya está ocupado',
+                    asiento: asientoExiste[0].seatNumber
+                });
             }
         }
+
+        // Generar código de reserva único
+        const reservationCode = 'TRP-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
 
         // Crear reserva
         const nuevaReserva = await orm.TransportReservation.create({
@@ -614,12 +733,23 @@ transportCtl.crearReservaTransporte = async (req, res) => {
 
         return res.status(201).json({ 
             message: 'Reserva de transporte creada exitosamente',
-            idReservation: nuevaReserva.idTransportReservation,
-            reservationCode: reservationCode
+            reserva: {
+                idReservation: nuevaReserva.idTransportReservation,
+                reservationCode: reservationCode,
+                pasajero: passengerName,
+                ruta: `${descifrarSeguro(horarioData.origin)} → ${descifrarSeguro(horarioData.destination)}`,
+                empresa: descifrarSeguro(horarioData.nameCompany),
+                vehiculo: horarioData.vehicleCode,
+                salida: horarioData.departureTime,
+                llegada: horarioData.arrivalTime,
+                asiento: seatId ? `ID: ${seatId}` : 'Sin asiento asignado',
+                precio: parseFloat(priceReservation),
+                estado: 'confirmed'
+            }
         });
 
     } catch (error) {
-        console.error('Error al crear reserva:', error);
+        console.error('Error al crear reserva de transporte:', error);
         return res.status(500).json({ 
             message: 'Error al crear la reserva', 
             error: error.message 
