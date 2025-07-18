@@ -21,10 +21,10 @@ staffCtl.mostrarStaff = async (req, res) => {
         const { department, position, status, page = 1, limit = 20 } = req.query;
         
         let query = `
-            SELECT s.*, u.nameUsers, u.emailUser, u.userName,
+            SELECT s.*, u.nameUsers, u.emailUser , u.userName,
                    COUNT(sa.idStaffAssignment) as asignacionesActivas
             FROM staffs s
-            LEFT JOIN users u ON s.usuarioId = u.idUser
+            LEFT JOIN users u ON s.usuarioId = u.idUser 
             LEFT JOIN staffAssignments sa ON s.idStaff = sa.staffId 
                 AND sa.stateAssignment = 1 
                 AND sa.statusAssignment IN ('scheduled', 'in_progress')
@@ -63,7 +63,7 @@ staffCtl.mostrarStaff = async (req, res) => {
             emailStaff: descifrarSeguro(staff.emailStaff),
             phoneStaff: descifrarSeguro(staff.phoneStaff),
             nameUsers: descifrarSeguro(staff.nameUsers),
-            emailUser: descifrarSeguro(staff.emailUser),
+            emailUser:  descifrarSeguro(staff.emailUser ),
             userName: descifrarSeguro(staff.userName),
             workSchedule: staff.workSchedule ? JSON.parse(staff.workSchedule) : {},
             permissions: staff.permissions ? JSON.parse(staff.permissions) : {},
@@ -71,7 +71,7 @@ staffCtl.mostrarStaff = async (req, res) => {
         }));
 
         // Contar total para paginación
-        let countQuery = query.replace(/SELECT s\.\*, u\.nameUsers.*?GROUP BY s\.idStaff/, 'SELECT COUNT(DISTINCT s.idStaff) as total FROM staff s LEFT JOIN users u ON s.usuarioId = u.idUser LEFT JOIN staffAssignments sa ON s.idStaff = sa.staffId AND sa.stateAssignment = 1 AND sa.statusAssignment IN (\'scheduled\', \'in_progress\')');
+        let countQuery = query.replace(/SELECT s\.\*, u\.nameUsers.*?GROUP BY s\.idStaff/, 'SELECT COUNT(DISTINCT s.idStaff) as total FROM staffs s LEFT JOIN users u ON s.usuarioId = u.idUser  LEFT JOIN staffAssignments sa ON s.idStaff = sa.staffId AND sa.stateAssignment = 1 AND sa.statusAssignment IN (\'scheduled\', \'in_progress\')');
         countQuery = countQuery.replace(/ORDER BY.*?LIMIT.*?OFFSET.*?$/, '');
         const countParams = params.slice(0, -2);
 
@@ -112,7 +112,7 @@ staffCtl.crearStaff = async (req, res) => {
         // Verificar si el usuario existe (si se proporciona)
         if (usuarioId) {
             const [usuarioExiste] = await sql.promise().query(
-                'SELECT idUser FROM users WHERE idUser = ? AND stateUser = "active"',
+                'SELECT idUser  FROM users WHERE idUser  = ? AND stateUser  = "active"',
                 [usuarioId]
             );
 
@@ -123,7 +123,7 @@ staffCtl.crearStaff = async (req, res) => {
 
         // Verificar si el email ya existe
         const [emailExiste] = await sql.promise().query(
-            'SELECT idStaff FROM staff WHERE emailStaff = ? AND stateStaff = 1',
+            'SELECT idStaff FROM staffs WHERE emailStaff = ? AND stateStaff = 1',
             [cifrarDatos(emailStaff)]
         );
 
@@ -176,9 +176,9 @@ staffCtl.obtenerStaff = async (req, res) => {
         const { id } = req.params;
 
         const [staff] = await sql.promise().query(`
-            SELECT s.*, u.nameUsers, u.emailUser, u.userName
-            FROM staff s
-            LEFT JOIN users u ON s.usuarioId = u.idUser
+            SELECT s.*, u.nameUsers, u.emailUser , u.userName
+            FROM staffs s
+            LEFT JOIN users u ON s.usuarioId = u.idUser 
             WHERE s.idStaff = ? AND s.stateStaff = 1
         `, [id]);
 
@@ -211,7 +211,7 @@ staffCtl.obtenerStaff = async (req, res) => {
             emailStaff: descifrarSeguro(staffData.emailStaff),
             phoneStaff: descifrarSeguro(staffData.phoneStaff),
             nameUsers: descifrarSeguro(staffData.nameUsers),
-            emailUser: descifrarSeguro(staffData.emailUser),
+            emailUser:  descifrarSeguro(staffData.emailUser ),
             userName: descifrarSeguro(staffData.userName),
             workSchedule: staffData.workSchedule ? JSON.parse(staffData.workSchedule) : {},
             permissions: staffData.permissions ? JSON.parse(staffData.permissions) : {},
@@ -242,7 +242,7 @@ staffCtl.actualizarStaff = async (req, res) => {
 
         // Verificar que el staff existe
         const [staffExiste] = await sql.promise().query(
-            'SELECT idStaff FROM staff WHERE idStaff = ? AND stateStaff = 1',
+            'SELECT idStaff FROM staffs WHERE idStaff = ? AND stateStaff = 1',
             [id]
         );
 
@@ -253,7 +253,7 @@ staffCtl.actualizarStaff = async (req, res) => {
         // Verificar email duplicado (excluyendo el actual)
         if (emailStaff) {
             const [emailExiste] = await sql.promise().query(
-                'SELECT idStaff FROM staff WHERE emailStaff = ? AND idStaff != ? AND stateStaff = 1',
+                'SELECT idStaff FROM staffs WHERE emailStaff = ? AND idStaff != ? AND stateStaff = 1',
                 [cifrarDatos(emailStaff), id]
             );
 
@@ -264,7 +264,7 @@ staffCtl.actualizarStaff = async (req, res) => {
 
         // Actualizar staff
         await sql.promise().query(
-            `UPDATE staff SET 
+            `UPDATE staffs SET 
                 nameStaff = COALESCE(?, nameStaff),
                 emailStaff = COALESCE(?, emailStaff),
                 phoneStaff = COALESCE(?, phoneStaff),
@@ -312,7 +312,7 @@ staffCtl.cambiarEstadoStaff = async (req, res) => {
         }
 
         await sql.promise().query(
-            'UPDATE staff SET statusStaff = ?, updateStaff = ? WHERE idStaff = ?',
+            'UPDATE staffs SET statusStaff = ?, updateStaff = ? WHERE idStaff = ?',
             [statusStaff, new Date().toLocaleString(), id]
         );
 
@@ -340,7 +340,7 @@ staffCtl.obtenerAsignaciones = async (req, res) => {
                        ELSE 'General'
                    END as locationName
             FROM staffAssignments sa
-            JOIN staff s ON sa.staffId = s.idStaff
+            JOIN staffs s ON sa.staffId = s.idStaff
             LEFT JOIN cinemas c ON sa.locationId = c.idCinema AND sa.assignmentType = 'cinema'
             LEFT JOIN concertVenues cv ON sa.locationId = cv.idConcertVenue AND sa.assignmentType = 'concert'
             LEFT JOIN transportCompanies tc ON sa.locationId = tc.idTransportCompany AND sa.assignmentType = 'transport'
@@ -414,7 +414,7 @@ staffCtl.crearAsignacion = async (req, res) => {
 
         // Verificar que el staff existe y está activo
         const [staffExiste] = await sql.promise().query(
-            'SELECT idStaff, statusStaff FROM staff WHERE idStaff = ? AND stateStaff = 1',
+            'SELECT idStaff, statusStaff FROM staffs WHERE idStaff = ? AND stateStaff = 1',
             [staffId]
         );
 
@@ -523,7 +523,7 @@ staffCtl.obtenerEstadisticas = async (req, res) => {
                 COUNT(CASE WHEN statusStaff = 'on_leave' THEN 1 END) as staffEnLicencia,
                 COUNT(CASE WHEN statusStaff = 'terminated' THEN 1 END) as staffTerminado,
                 AVG(salaryStaff) as salarioPromedio
-            FROM staff 
+            FROM staffs 
             WHERE stateStaff = 1
         `);
 
@@ -534,7 +534,7 @@ staffCtl.obtenerEstadisticas = async (req, res) => {
                 COUNT(*) as cantidad,
                 COUNT(CASE WHEN statusStaff = 'active' THEN 1 END) as activos,
                 AVG(salaryStaff) as salarioPromedio
-            FROM staff 
+            FROM staffs 
             WHERE stateStaff = 1
             GROUP BY departmentStaff
             ORDER BY cantidad DESC
@@ -557,7 +557,7 @@ staffCtl.obtenerEstadisticas = async (req, res) => {
         const [staffMasActivo] = await sql.promise().query(`
             SELECT s.nameStaff, s.positionStaff, s.departmentStaff,
                    COUNT(sa.idStaffAssignment) as totalAsignaciones
-            FROM staff s
+            FROM staffs s
             LEFT JOIN staffAssignments sa ON s.idStaff = sa.staffId AND sa.stateAssignment = 1
             WHERE s.stateStaff = 1
             GROUP BY s.idStaff
@@ -649,7 +649,7 @@ staffCtl.buscarStaff = async (req, res) => {
 
         let query = `
             SELECT s.*, u.nameUsers
-            FROM staff s
+            FROM staffs s
             LEFT JOIN users u ON s.usuarioId = u.idUser
             WHERE s.stateStaff = 1 AND (
                 s.nameStaff LIKE ? OR 
@@ -711,7 +711,7 @@ staffCtl.eliminarStaff = async (req, res) => {
         }
 
         await sql.promise().query(
-            'UPDATE staff SET stateStaff = 0, updateStaff = ? WHERE idStaff = ?',
+            'UPDATE staffs SET stateStaff = 0, updateStaff = ? WHERE idStaff = ?',
             [new Date().toLocaleString(), id]
         );
 
