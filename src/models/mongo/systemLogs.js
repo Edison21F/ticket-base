@@ -1,22 +1,16 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const systemLogSchema = new mongoose.Schema({
-    level: {
-        type: String,
-        enum: ['info', 'warning', 'error', 'debug'],
-        default: 'info'
-    },
-    message: String,
-    service: String,
-    module: String,
-    stackTrace: String,
-    requestId: String,
-    userId: String,
-    metadata: mongoose.Schema.Types.Mixed,
-    timestamp: {
-        type: Date,
-        default: Date.now
-    }
+    level: { type: String, default: 'info' },
+    message: { type: String },
+    service: { type: String },
+    module: { type: String },
+    stackTrace: { type: String },
+    requestId: { type: String },
+    userId: { type: String },
+    metadata: { type: String },
+    timestamp: { type: String }
 }, {
     timestamps: true,
     collection: 'systemLogs'

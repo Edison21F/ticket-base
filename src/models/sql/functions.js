@@ -1,40 +1,42 @@
+// Modelo de función. Todos los campos definidos como string para máxima compatibilidad y flexibilidad en la base de datos.
 const func = (sequelize, type) => {
     return sequelize.define('functions', {
+        // Identificador único de la función (string)
         idFunction: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
-        dateFunction: type.DATE,
-        startTime: type.TIME,
-        endTime: type.TIME,
-        formatFunction: {
-            type: type.ENUM('2D', '3D', 'IMAX', '4DX'),
-            defaultValue: '2D'
-        },
+        // Fecha de la función (string)
+        dateFunction: type.STRING,
+        // Hora de inicio (string)
+        startTime: type.STRING,
+        // Hora de fin (string)
+        endTime: type.STRING,
+        // Formato de la función (string)
+        formatFunction: type.STRING,
+        // Idioma de la función (string)
         languageFunction: type.STRING,
+        // Subtítulos de la función (string)
         subtitlesFunction: type.STRING,
-        basePrice: type.DECIMAL(8, 2),
-        vipPrice: type.DECIMAL(8, 2),
-        premiumPrice: type.DECIMAL(8, 2),
-        availableSeats: type.INTEGER,
-        reservedSeats: {
-            type: type.INTEGER,
-            defaultValue: 0
-        },
-        soldSeats: {
-            type: type.INTEGER,
-            defaultValue: 0
-        },
-        stateFunction: {
-            type: type.ENUM('Scheduled', 'InProgress', 'Finished', 'Cancelled'),
-            defaultValue: 'Scheduled'
-        },
-        activeFunction: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        // Precio base (string)
+        basePrice: type.STRING,
+        // Precio VIP (string)
+        vipPrice: type.STRING,
+        // Precio Premium (string)
+        premiumPrice: type.STRING,
+        // Asientos disponibles (string)
+        availableSeats: type.STRING,
+        // Asientos reservados (string)
+        reservedSeats: type.STRING,
+        // Asientos vendidos (string)
+        soldSeats: type.STRING,
+        // Estado de la función (string)
+        stateFunction: type.STRING,
+        // Estado lógico de la función (string)
+        activeFunction: type.STRING,
+        // Fecha de creación (string)
         createFunction: type.STRING,
+        // Fecha de última actualización (string)
         updateFunction: type.STRING,
     }, {
         timestamps: false,

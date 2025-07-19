@@ -1,24 +1,22 @@
 const mongoose = require('mongoose');
 
+
 const activityLogSchema = new mongoose.Schema({
-    userId: String,
-    action: String,
-    entityType: String,
-    entityId: String,
-    details: mongoose.Schema.Types.Mixed,
-    ipAddress: String,
-    userAgent: String,
-    timestamp: {
-        type: Date,
-        default: Date.now
-    },
-    sessionId: String,
+    userId: { type: String }, // Siempre string
+    action: { type: String }, // Siempre string
+    entityType: { type: String }, // Siempre string
+    entityId: { type: String }, // Siempre string
+    details: { type: String }, // Convertido a string para uniformidad
+    ipAddress: { type: String }, // Siempre string
+    userAgent: { type: String }, // Siempre string
+    timestamp: { type: String }, // Fecha como string para máxima compatibilidad
+    sessionId: { type: String }, // Siempre string
     location: {
-        country: String,
-        city: String,
+        country: { type: String }, // Siempre string
+        city: { type: String }, // Siempre string
         coordinates: {
-            latitude: Number,
-            longitude: Number
+            latitude: { type: String }, // Siempre string
+            longitude: { type: String } // Siempre string
         }
     }
 }, {
@@ -27,4 +25,5 @@ const activityLogSchema = new mongoose.Schema({
 });
 
 const ActivityLog = mongoose.model('ActivityLog', activityLogSchema);
+// Modelo de activityLogs solo con strings
 module.exports = ActivityLog;

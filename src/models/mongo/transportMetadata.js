@@ -1,65 +1,56 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const transportMetadataSchema = new mongoose.Schema({
     routeDetails: {
         gpsCoordinates: [{
-            latitude: Number,
-            longitude: Number,
-            stopName: String,
-            estimatedTime: String
+            latitude: { type: String },
+            longitude: { type: String },
+            stopName: { type: String },
+            estimatedTime: { type: String }
         }],
         trafficPatterns: [{
-            timeRange: String,
-            congestionLevel: String,
-            alternativeRoutes: [String]
+            timeRange: { type: String },
+            congestionLevel: { type: String },
+            alternativeRoutes: [{ type: String }]
         }],
         weatherImpact: {
-            rainDelayMinutes: Number,
-            snowCancellation: Boolean,
-            windSpeedLimit: Number
+            rainDelayMinutes: { type: String },
+            snowCancellation: { type: String },
+            windSpeedLimit: { type: String }
         }
     },
     vehicleFeatures: {
-        wifi: Boolean,
-        airConditioning: Boolean,
-        entertainment: [String],
+        wifi: { type: String },
+        airConditioning: { type: String },
+        entertainment: [{ type: String }],
         accessibility: {
-            wheelchairAccessible: Boolean,
-            audioAnnouncements: Boolean,
-            visualDisplays: Boolean
+            wheelchairAccessible: { type: String },
+            audioAnnouncements: { type: String },
+            visualDisplays: { type: String }
         },
         safety: {
-            emergencyExits: Number,
-            firstAidKit: Boolean,
-            securityCameras: Boolean
+            emergencyExits: { type: String },
+            firstAidKit: { type: String },
+            securityCameras: { type: String }
         }
     },
     serviceLevel: {
-        punctualityScore: Number,
-        cleanlinessRating: Number,
-        customerSatisfaction: Number,
-        lastInspection: Date
+        punctualityScore: { type: String },
+        cleanlinessRating: { type: String },
+        customerSatisfaction: { type: String },
+        lastInspection: { type: String }
     },
     realTimeTracking: {
         currentLocation: {
-            latitude: Number,
-            longitude: Number,
-            lastUpdate: Date
+            latitude: { type: String },
+            longitude: { type: String },
+            lastUpdate: { type: String }
         },
-        estimatedArrival: Date,
-        delayStatus: String,
-        passengerCount: Number
+        estimatedArrival: { type: String },
+        delayStatus: { type: String }
     },
-    operationalNotes: {
-        maintenanceSchedule: [{
-            type: String,
-            date: Date,
-            description: String
-        }],
-        driverNotes: String,
-        routeHazards: [String]
-    },
-    idTransportSql: String
+    idTransportSql: { type: String }
 }, {
     timestamps: true,
     collection: 'transportMetadata'

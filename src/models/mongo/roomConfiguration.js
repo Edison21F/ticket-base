@@ -1,32 +1,33 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const roomConfigurationSchema = new mongoose.Schema({
-    seatsPerRow: [Number],
-    technology: [String],
+    seatsPerRow: [{ type: String }],
+    technology: [{ type: String }],
     seatConfiguration: {
-        layout: String,
+        layout: { type: String },
         accessibility: {
-            wheelchairSeats: [String],
-            companionSeats: [String]
+            wheelchairSeats: [{ type: String }],
+            companionSeats: [{ type: String }]
         },
         vipSection: {
-            rows: [String],
-            amenities: [String]
+            rows: [{ type: String }],
+            amenities: [{ type: String }]
         }
     },
     amenities: {
-        soundSystem: String,
-        projectionType: String,
-        screenSize: String,
-        specialFeatures: [String]
+        soundSystem: { type: String },
+        projectionType: { type: String },
+        screenSize: { type: String },
+        specialFeatures: [{ type: String }]
     },
     maintenanceSchedule: {
-        lastMaintenance: Date,
-        nextMaintenance: Date,
-        maintenanceType: String,
-        notes: String
+        lastMaintenance: { type: String },
+        nextMaintenance: { type: String },
+        maintenanceType: { type: String },
+        notes: { type: String }
     },
-    idRoomSql: String
+    idRoomSql: { type: String }
 }, {
     timestamps: true,
     collection: 'roomConfigurations'

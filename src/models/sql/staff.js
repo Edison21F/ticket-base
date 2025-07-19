@@ -1,8 +1,7 @@
 const staff = (sequelize, type) => {
     return sequelize.define('staffs', {
         idStaff: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         nameStaff: type.STRING,
@@ -13,18 +12,12 @@ const staff = (sequelize, type) => {
         phoneStaff: type.STRING,
         positionStaff: type.STRING,
         departmentStaff: type.STRING,
-        hireDate: type.DATE,
-        salaryStaff: type.DECIMAL(10, 2),
-        workSchedule: type.TEXT, // JSON string
-        permissions: type.TEXT, // JSON string
-        statusStaff: {
-            type: type.ENUM('active', 'inactive', 'on_leave', 'terminated'),
-            defaultValue: 'active'
-        },
-        stateStaff: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        hireDate: type.STRING,
+        salaryStaff: type.STRING,
+        workSchedule: type.STRING,
+        permissions: type.STRING,
+        statusStaff: type.STRING,
+        stateStaff: type.STRING,
         createStaff: type.STRING,
         updateStaff: type.STRING,
     }, {

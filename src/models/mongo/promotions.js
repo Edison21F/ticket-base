@@ -1,61 +1,38 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const promotionSchema = new mongoose.Schema({
-    code: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    name: String,
-    description: String,
-    discountType: {
-        type: String,
-        enum: ['Percentage', 'FixedAmount', 'Combo'],
-        required: true
-    },
-    discountValue: Number,
-    minimumAmount: Number,
-    maxTotalUses: Number,
-    maxUsesPerUser: {
-        type: Number,
-        default: 1
-    },
-    currentUses: {
-        type: Number,
-        default: 0
-    },
-    startDate: Date,
-    endDate: Date,
-    appliesTo: {
-        type: String,
-        enum: ['Tickets', 'Products', 'Total'],
-        default: 'Total'
-    },
-    applicableCinemas: [String],
-    applicableMovies: [String],
-    applicableDays: [Number],
+    code: { type: String, unique: true, required: true },
+    name: { type: String },
+    description: { type: String },
+    discountType: { type: String, required: true },
+    discountValue: { type: String },
+    minimumAmount: { type: String },
+    maxTotalUses: { type: String },
+    maxUsesPerUser: { type: String },
+    currentUses: { type: String },
+    startDate: { type: String },
+    endDate: { type: String },
+    appliesTo: { type: String },
+    applicableCinemas: [{ type: String }],
+    applicableMovies: [{ type: String }],
+    applicableDays: [{ type: String }],
     timeRestrictions: {
-        startTime: String,
-        endTime: String
+        startTime: { type: String },
+        endTime: { type: String }
     },
     targetAudience: {
-        vipStatus: [String],
+        vipStatus: [{ type: String }],
         ageRange: {
-            min: Number,
-            max: Number
+            min: { type: String },
+            max: { type: String }
         },
-        newUsers: Boolean
+        newUsers: { type: String }
     },
     usageTracking: [{
-        userId: String,
-        usedAt: Date,
-        appliedDiscount: Number,
-        reservationId: String
-    }],
-    active: {
-        type: Boolean,
-        default: true
-    }
+        userId: { type: String },
+        useDate: { type: String }
+    }]
 }, {
     timestamps: true,
     collection: 'promotions'

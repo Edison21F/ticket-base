@@ -1,20 +1,20 @@
+// Modelo de asiento reservado. Todos los campos definidos como string para máxima compatibilidad y flexibilidad en la base de datos.
 const reservedSeat = (sequelize, type) => {
     return sequelize.define('reservedSeats', {
+        // Identificador único del asiento reservado (string)
         idReservedSeat: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
-        paidPrice: type.DECIMAL(8, 2),
-        ticketType: {
-            type: type.ENUM('Regular', 'VIP', 'Premium', 'Student', 'Senior'),
-            defaultValue: 'Regular'
-        },
-        appliedDiscount: {
-            type: type.DECIMAL(8, 2),
-            defaultValue: 0.00
-        },
+        // Precio pagado (string)
+        paidPrice: type.STRING,
+        // Tipo de ticket (string)
+        ticketType: type.STRING,
+        // Descuento aplicado (string)
+        appliedDiscount: type.STRING,
+        // Fecha de creación (string)
         createReservedSeat: type.STRING,
+        // Fecha de última actualización (string)
         updateReservedSeat: type.STRING,
     }, {
         timestamps: false,

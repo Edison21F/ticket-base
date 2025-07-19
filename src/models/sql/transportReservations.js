@@ -1,8 +1,7 @@
 const transportReservation = (sequelize, type) => {
     return sequelize.define('transportReservations', {
         idTransportReservation: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         reservationCode: {
@@ -10,21 +9,15 @@ const transportReservation = (sequelize, type) => {
             unique: true
         },
         passengerName: type.STRING,
-        passengerDocument: type.STRING, // Para vuelos
+        passengerDocument: type.STRING,
         passengerEmail: type.STRING,
         passengerPhone: type.STRING,
-        bookingClass: {
-            type: type.ENUM('economy', 'business', 'first_class', 'premium'),
-            defaultValue: 'economy'
-        },
-        priceReservation: type.DECIMAL(8, 2),
-        statusReservation: {
-            type: type.ENUM('confirmed', 'checked_in', 'boarded', 'cancelled', 'no_show'),
-            defaultValue: 'confirmed'
-        },
-        specialRequests: type.TEXT, // Comida especial, asistencia, etc.
-        checkInTime: type.DATE,
-        luggageInfo: type.TEXT, // JSON string
+        bookingClass: type.STRING,
+        priceReservation: type.STRING,
+        statusReservation: type.STRING,
+        specialRequests: type.STRING,
+        checkInTime: type.STRING,
+        luggageInfo: type.STRING,
         createTransportReservation: type.STRING,
         updateTransportReservation: type.STRING,
     }, {

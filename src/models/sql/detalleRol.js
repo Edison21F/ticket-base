@@ -1,17 +1,19 @@
-const detalleRol = (sequelize, type)=>{
-    return sequelize.define('detalleROls',{
-        idDetalleRol:{
-            type: type.INTEGER,
-            autoIncremnt: true,
+// Modelo de detalle de rol. Todos los campos definidos como string para máxima compatibilidad y flexibilidad en la base de datos.
+const detalleRol = (sequelize, type) => {
+    return sequelize.define('detalleROls', {
+        // Identificador único del detalle de rol (string)
+        idDetalleRol: {
+            type: type.STRING,
             primaryKey: true
         },
+        // Fecha de creación (string)
         createDetalleRol: type.STRING,
+        // Fecha de última actualización (string)
         updateDetalleRol: type.STRING,
-    },{
+    }, {
         timestamps: false,
-        Comment: 'Talbla de detalle Rol'
+        comment: 'Tabla de detalle Rol'
     })
 }
 
-
-module.exports = detalleRol
+module.exports = detalleRol;

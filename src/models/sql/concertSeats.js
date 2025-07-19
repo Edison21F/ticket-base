@@ -1,27 +1,28 @@
+// Modelo de asiento de concierto. Todos los campos definidos como string para máxima compatibilidad y flexibilidad en la base de datos.
 const concertSeat = (sequelize, type) => {
     return sequelize.define('concertSeats', {
+        // Identificador único del asiento (string)
         idConcertSeat: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
+        // Identificador de fila (string)
         rowIdentifier: type.STRING,
-        seatNumber: type.INTEGER,
-        seatType: {
-            type: type.ENUM('regular', 'vip', 'wheelchair', 'standing'),
-            defaultValue: 'regular'
-        },
-        positionX: type.INTEGER,
-        positionY: type.INTEGER,
-        viewLine: {
-            type: type.ENUM('clear', 'partial', 'obstructed'),
-            defaultValue: 'clear'
-        },
-        stateConcertSeat: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        // Número de asiento (string)
+        seatNumber: type.STRING,
+        // Tipo de asiento (string)
+        seatType: type.STRING,
+        // Posición X en el mapa de la sala (string)
+        positionX: type.STRING,
+        // Posición Y en el mapa de la sala (string)
+        positionY: type.STRING,
+        // Línea de visión (string)
+        viewLine: type.STRING,
+        // Estado lógico del asiento (string)
+        stateConcertSeat: type.STRING,
+        // Fecha de creación (string)
         createConcertSeat: type.STRING,
+        // Fecha de última actualización (string)
         updateConcertSeat: type.STRING,
     }, {
         timestamps: false,

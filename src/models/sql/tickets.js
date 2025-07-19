@@ -1,23 +1,19 @@
 const ticket = (sequelize, type) => {
     return sequelize.define('tickets', {
         idTicket: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         ticketCode: {
             type: type.STRING,
             unique: true
         },
-        microserviceTicketId: type.STRING, // ID del ticket en el microservicio específico
+        microserviceTicketId: type.STRING,
         ticketType: type.STRING,
-        priceTicket: type.DECIMAL(10, 2),
-        statusTicket: {
-            type: type.ENUM('reserved', 'paid', 'used', 'cancelled', 'refunded'),
-            defaultValue: 'reserved'
-        },
-        purchaseDate: type.DATE,
-        qrCode: type.TEXT,
+        priceTicket: type.STRING,
+        statusTicket: type.STRING,
+        purchaseDate: type.STRING,
+        qrCode: type.STRING,
         createTicket: type.STRING,
         updateTicket: type.STRING,
     }, {

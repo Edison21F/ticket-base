@@ -1,8 +1,7 @@
 const usuario = (sequelize, type) =>{
     return sequelize.define('users', {
         idUser: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         nameUsers: type.STRING,
