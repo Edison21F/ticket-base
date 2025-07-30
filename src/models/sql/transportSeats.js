@@ -1,29 +1,16 @@
 const transportSeat = (sequelize, type) => {
     return sequelize.define('transportSeats', {
         idTransportSeat: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
-        seatNumber: type.STRING, // 1A, 1B, etc.
-        seatClass: {
-            type: type.ENUM('economy', 'business', 'first_class', 'premium'),
-            defaultValue: 'economy'
-        },
-        seatType: {
-            type: type.ENUM('window', 'aisle', 'middle'),
-            defaultValue: 'aisle'
-        },
-        amenities: type.TEXT, // JSON string
-        statusSeat: {
-            type: type.ENUM('available', 'occupied', 'maintenance', 'reserved'),
-            defaultValue: 'available'
-        },
-        additionalFee: type.DECIMAL(8, 2),
-        stateSeat: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        seatNumber: type.STRING,
+        seatClass: type.STRING,
+        seatType: type.STRING,
+        amenities: type.STRING,
+        statusSeat: type.STRING,
+        additionalFee: type.STRING,
+        stateSeat: type.STRING,
         createSeat: type.STRING,
         updateSeat: type.STRING,
     }, {

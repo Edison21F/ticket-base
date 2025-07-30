@@ -1,71 +1,50 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const systemSettingsSchema = new mongoose.Schema({
-    type: {
-        type: String,
-        enum: ['theme', 'typography', 'general', 'business', 'payment'],
-        required: true
-    },
+    type: { type: String, required: true },
     colors: {
-        primary: String,
-        secondary: String,
-        accent: String,
+        primary: { type: String },
+        secondary: { type: String },
+        accent: { type: String },
         background: {
-            from: String,
-            via: String,
-            to: String
+            from: { type: String },
+            via: { type: String },
+            to: { type: String }
         },
         text: {
-            primary: String,
-            secondary: String
+            primary: { type: String },
+            secondary: { type: String }
         },
-        borders: String,
-        success: String,
-        error: String,
-        warning: String
+        borders: { type: String },
+        success: { type: String },
+        error: { type: String },
+        warning: { type: String }
     },
     typography: {
-        primary: String,
-        secondary: String,
-        monospace: String,
+        primary: { type: String },
+        secondary: { type: String },
+        monospace: { type: String },
         sizes: {
-            small: String,
-            normal: String,
-            medium: String,
-            large: String,
-            extraLarge: String
+            small: { type: String },
+            normal: { type: String },
+            medium: { type: String },
+            large: { type: String },
+            extraLarge: { type: String }
         },
         weights: {
-            light: String,
-            normal: String,
-            medium: String,
-            semiBold: String,
-            bold: String
+            light: { type: String },
+            normal: { type: String },
+            medium: { type: String },
+            semiBold: { type: String },
+            bold: { type: String }
         },
         lineHeights: {
-            compact: String,
-            normal: String,
-            relaxed: String,
-            loose: String
+            compact: { type: String },
+            normal: { type: String },
+            relaxed: { type: String },
+            loose: { type: String }
         }
-    },
-    businessConfig: {
-        serviceFee: Number,
-        reservationExpirationMinutes: Number,
-        maxSeatsPerReservation: Number,
-        allowGuestReservations: Boolean,
-        requireEmailVerification: Boolean,
-        enableLoyaltyProgram: Boolean
-    },
-    paymentConfig: {
-        enabledMethods: [String],
-        defaultCurrency: String,
-        enableRefunds: Boolean,
-        refundPolicyDays: Number
-    },
-    active: {
-        type: Boolean,
-        default: true
     }
 }, {
     timestamps: true,

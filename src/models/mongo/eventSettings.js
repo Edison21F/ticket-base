@@ -1,69 +1,61 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const eventSettingsSchema = new mongoose.Schema({
-    eventType: {
-        type: String,
-        enum: ['cinema', 'concert', 'transport'],
-        required: true
-    },
+    eventType: { type: String, required: true },
     generalSettings: {
-        maxReservationsPerUser: Number,
-        reservationExpirationMinutes: Number,
+        maxReservationsPerUser: { type: String },
+        reservationExpirationMinutes: { type: String },
         cancellationPolicy: {
-            hoursBeforeEvent: Number,
-            refundPercentage: Number,
-            processingFee: Number
+            hoursBeforeEvent: { type: String },
+            refundPercentage: { type: String },
+            processingFee: { type: String }
         },
         ageRestrictions: {
-            minimumAge: Number,
-            requiresGuardian: Boolean
+            minimumAge: { type: String },
+            requiresGuardian: { type: String }
         }
     },
     pricingSettings: {
         dynamicPricing: {
-            enabled: Boolean,
+            enabled: { type: String },
             priceMultipliers: [{
-                condition: String,
-                multiplier: Number
+                condition: { type: String },
+                multiplier: { type: String }
             }]
         },
         discountPolicies: [{
-            type: String,
-            percentage: Number,
-            conditions: [String]
+            type: { type: String },
+            percentage: { type: String },
+            conditions: [{ type: String }]
         }],
         taxConfiguration: {
-            taxRate: Number,
-            taxIncluded: Boolean
+            taxRate: { type: String },
+            taxIncluded: { type: String }
         }
     },
     notificationSettings: {
-        reminderTimes: [Number], // Horas antes del evento
+        reminderTimes: [{ type: String }],
         emailTemplates: {
-            confirmation: String,
-            reminder: String,
-            cancellation: String
+            confirmation: { type: String },
+            reminder: { type: String },
+            cancellation: { type: String }
         },
-        smsEnabled: Boolean,
-        pushNotificationsEnabled: Boolean
+        smsEnabled: { type: String },
+        pushNotificationsEnabled: { type: String }
     },
-    capacityManagement: {
-        overbookingPercentage: Number,
-        waitlistEnabled: Boolean,
-        maxWaitlistSize: Number,
-        autoReleaseMinutes: Number
-    },
+    capacityManagement: { type: String },
     accessibilitySettings: {
-        wheelchairSeats: Number,
-        hearingImpairedSupport: Boolean,
-        visuallyImpairedSupport: Boolean,
-        signLanguageInterpreter: Boolean
+        wheelchairSeats: { type: String },
+        hearingImpairedSupport: { type: String },
+        visuallyImpairedSupport: { type: String },
+        signLanguageInterpreter: { type: String }
     },
     securitySettings: {
-        idRequired: Boolean,
-        bagCheckRequired: Boolean,
-        metalDetector: Boolean,
-        prohibitedItems: [String]
+        idRequired: { type: String },
+        bagCheckRequired: { type: String },
+        metalDetector: { type: String },
+        prohibitedItems: [{ type: String }]
     }
 }, {
     timestamps: true,

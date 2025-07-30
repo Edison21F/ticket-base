@@ -1,38 +1,19 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const notificationSchema = new mongoose.Schema({
-    userId: String,
-    type: {
-        type: String,
-        enum: ['Reservation', 'Promotion', 'Reminder', 'System', 'Marketing'],
-        required: true
-    },
-    title: String,
-    message: String,
-    additionalData: mongoose.Schema.Types.Mixed,
-    read: {
-        type: Boolean,
-        default: false
-    },
-    sentEmail: {
-        type: Boolean,
-        default: false
-    },
-    sentPush: {
-        type: Boolean,
-        default: false
-    },
-    scheduledDate: Date,
-    sentDate: Date,
-    channels: [{
-        type: String,
-        enum: ['email', 'push', 'sms', 'in-app']
-    }],
-    priority: {
-        type: String,
-        enum: ['low', 'medium', 'high', 'urgent'],
-        default: 'medium'
-    }
+    userId: { type: String },
+    type: { type: String, required: true },
+    title: { type: String },
+    message: { type: String },
+    additionalData: { type: String },
+    read: { type: String },
+    sentEmail: { type: String },
+    sentPush: { type: String },
+    scheduledDate: { type: String },
+    sentDate: { type: String },
+    channels: [{ type: String }],
+    priority: { type: String }
 }, {
     timestamps: true,
     collection: 'notifications'

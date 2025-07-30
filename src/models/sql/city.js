@@ -1,17 +1,20 @@
+// Modelo de ciudad. Todos los campos definidos como string para máxima compatibilidad y flexibilidad en la base de datos.
 const city = (sequelize, type) => {
     return sequelize.define('cities', {
+        // Identificador único de la ciudad (string)
         idCity: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
+        // Nombre de la ciudad (string)
         nameCity: type.STRING,
+        // Código postal (string)
         postalCode: type.STRING,
-        stateCity: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        // Estado lógico de la ciudad (string)
+        stateCity: type.STRING,
+        // Fecha de creación (string)
         createCity: type.STRING,
+        // Fecha de última actualización (string)
         updateCity: type.STRING,
     }, {
         timestamps: false,

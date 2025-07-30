@@ -1,23 +1,16 @@
 const room = (sequelize, type) => {
     return sequelize.define('rooms', {
         idRoom: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         nameRoom: type.STRING,
-        numberRoom: type.INTEGER,
-        typeRoom: {
-            type: type.ENUM('Regular', 'VIP', 'IMAX', '4DX', 'Premium'),
-            defaultValue: 'Regular'
-        },
-        totalCapacity: type.INTEGER,
-        rows: type.INTEGER,
-        basePrice: type.DECIMAL(8, 2),
-        stateRoom: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        numberRoom: type.STRING,
+        typeRoom: type.STRING,
+        totalCapacity: type.STRING,
+        rows: type.STRING,
+        basePrice: type.STRING,
+        stateRoom: type.STRING,
         createRoom: type.STRING,
         updateRoom: type.STRING,
     }, {

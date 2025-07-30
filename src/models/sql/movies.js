@@ -1,46 +1,48 @@
+// Modelo de película. Todos los campos definidos como string para máxima compatibilidad y flexibilidad en la base de datos.
 const movie = (sequelize, type) => {
     return sequelize.define('movies', {
+        // Identificador único de la película (string)
         idMovie: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
+        // Título de la película (string)
         titleMovie: type.STRING,
+        // Título original (string)
         originalTitle: type.STRING,
-        synopsis: type.TEXT,
-        durationMinutes: type.INTEGER,
-        releaseDate: type.DATE,
-        endDate: type.DATE,
+        // Sinopsis (string)
+        synopsis: type.STRING,
+        // Duración en minutos (string)
+        durationMinutes: type.STRING,
+        // Fecha de estreno (string)
+        releaseDate: type.STRING,
+        // Fecha de finalización (string)
+        endDate: type.STRING,
+        // Idioma original (string)
         originalLanguage: type.STRING,
-        budget: type.DECIMAL(15, 2),
-        revenue: type.DECIMAL(15, 2),
+        // Presupuesto (string)
+        budget: type.STRING,
+        // Ingresos (string)
+        revenue: type.STRING,
+        // Distribuidor (string)
         distributor: type.STRING,
+        // País de origen (string)
         countryOrigin: type.STRING,
-        ratingMovie: {
-            type: type.DECIMAL(3, 2),
-            defaultValue: 0.0
-        },
-        voteCount: {
-            type: type.INTEGER,
-            defaultValue: 0
-        },
-        popularMovie: {
-            type: type.BOOLEAN,
-            defaultValue: false
-        },
-        newMovie: {
-            type: type.BOOLEAN,
-            defaultValue: false
-        },
-        featuredMovie: {
-            type: type.BOOLEAN,
-            defaultValue: false
-        },
-        stateMovie: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        // Calificación (string)
+        ratingMovie: type.STRING,
+        // Cantidad de votos (string)
+        voteCount: type.STRING,
+        // Indicador de popularidad (string)
+        popularMovie: type.STRING,
+        // Indicador de novedad (string)
+        newMovie: type.STRING,
+        // Indicador de destacado (string)
+        featuredMovie: type.STRING,
+        // Estado lógico de la película (string)
+        stateMovie: type.STRING,
+        // Fecha de creación (string)
         createMovie: type.STRING,
+        // Fecha de última actualización (string)
         updateMovie: type.STRING,
     }, {
         timestamps: false,

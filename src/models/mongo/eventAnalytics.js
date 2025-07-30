@@ -1,66 +1,50 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const eventAnalyticsSchema = new mongoose.Schema({
-    eventId: String,
-    eventType: {
-        type: String,
-        enum: ['cinema', 'concert', 'transport'],
-        required: true
-    },
-    date: Date,
+    eventId: { type: String },
+    eventType: { type: String, required: true },
+    date: { type: String },
     metrics: {
-        totalAttendees: Number,
-        revenue: Number,
-        averageRating: Number,
-        conversionRate: Number,
-        refundRate: Number,
-        noShowRate: Number
+        totalAttendees: { type: String },
+        revenue: { type: String },
+        averageRating: { type: String },
+        conversionRate: { type: String },
+        refundRate: { type: String },
+        noShowRate: { type: String }
     },
     demographics: {
         ageGroups: [{
-            range: String,
-            count: Number,
-            percentage: Number
+            range: { type: String },
+            count: { type: String },
+            percentage: { type: String }
         }],
         genderDistribution: {
-            male: Number,
-            female: Number,
-            other: Number
+            male: { type: String },
+            female: { type: String },
+            other: { type: String }
         },
         geographicDistribution: [{
-            location: String,
-            count: Number,
-            percentage: Number
+            location: { type: String },
+            count: { type: String },
+            percentage: { type: String }
         }]
     },
     salesData: {
         advanceSales: [{
-            daysBeforeEvent: Number,
-            ticketsSold: Number,
-            revenue: Number
+            daysBeforeEvent: { type: String },
+            ticketsSold: { type: String },
+            revenue: { type: String }
         }],
         peakSalesHours: [{
-            hour: Number,
-            sales: Number
+            hour: { type: String },
+            sales: { type: String }
         }],
         paymentMethodUsage: [{
-            method: String,
-            count: Number,
-            percentage: Number
+            method: { type: String },
+            count: { type: String },
+            percentage: { type: String }
         }]
-    },
-    customerFeedback: {
-        averageRating: Number,
-        totalReviews: Number,
-        sentimentScore: Number,
-        commonComplaints: [String],
-        commonPraises: [String]
-    },
-    operationalMetrics: {
-        checkInTime: Number,
-        averageWaitTime: Number,
-        staffEfficiency: Number,
-        equipmentDowntime: Number
     }
 }, {
     timestamps: true,

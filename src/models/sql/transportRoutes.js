@@ -1,30 +1,20 @@
 const transportRoute = (sequelize, type) => {
     return sequelize.define('transportRoutes', {
         idTransportRoute: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         routeName: type.STRING,
-        transportType: {
-            type: type.ENUM('bus', 'metro', 'flight', 'train', 'taxi', 'boat'),
-            allowNull: false
-        },
+        transportType: type.STRING,
         origin: type.STRING,
         destination: type.STRING,
-        distanceKm: type.DECIMAL(8, 2),
-        estimatedDuration: type.INTEGER, // En minutos
+        distanceKm: type.STRING,
+        estimatedDuration: type.STRING,
         routeCode: type.STRING,
-        waypoints: type.TEXT, // JSON string con puntos intermedios
-        tollCosts: type.DECIMAL(8, 2),
-        statusRoute: {
-            type: type.ENUM('active', 'suspended', 'maintenance'),
-            defaultValue: 'active'
-        },
-        stateRoute: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        waypoints: type.STRING,
+        tollCosts: type.STRING,
+        statusRoute: type.STRING,
+        stateRoute: type.STRING,
         createRoute: type.STRING,
         updateRoute: type.STRING,
     }, {

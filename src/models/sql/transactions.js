@@ -1,37 +1,24 @@
 const transaction = (sequelize, type) => {
     return sequelize.define('transactions', {
         idTransaction: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         transactionNumber: {
             type: type.STRING,
             unique: true
         },
-        paymentMethod: {
-            type: type.ENUM('CreditCard', 'DebitCard', 'PayPal', 'Transfer', 'Cash'),
-            defaultValue: 'CreditCard'
-        },
-        paymentProvider: {
-            type: type.ENUM('Stripe', 'PayPal', 'Cash', 'Bank'),
-            defaultValue: 'Stripe'
-        },
-        amount: type.DECIMAL(10, 2),
-        currency: {
-            type: type.STRING(3),
-            defaultValue: 'USD'
-        },
-        stateTransaction: {
-            type: type.ENUM('Pending', 'Processing', 'Completed', 'Failed', 'Refunded'),
-            defaultValue: 'Pending'
-        },
+        paymentMethod: type.STRING,
+        paymentProvider: type.STRING,
+        amount: type.STRING,
+        currency: type.STRING,
+        stateTransaction: type.STRING,
         externalReference: type.STRING,
-        processingDate: type.DATE,
-        completedDate: type.DATE,
-        refundAmount: type.DECIMAL(10, 2),
-        refundDate: type.DATE,
-        processorCommission: type.DECIMAL(8, 2),
+        processingDate: type.STRING,
+        completedDate: type.STRING,
+        refundAmount: type.STRING,
+        refundDate: type.STRING,
+        processorCommission: type.STRING,
         createTransaction: type.STRING,
         updateTransaction: type.STRING,
     }, {

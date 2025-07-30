@@ -1,112 +1,76 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const statisticsSchema = new mongoose.Schema({
-    date: Date,
-    type: {
-        type: String,
-        enum: ['daily', 'weekly', 'monthly', 'yearly'],
-        required: true
-    },
-    cinemaId: String,
-    movieId: String,
+    date: { type: String },
+    type: { type: String, required: true },
+    cinemaId: { type: String },
+    movieId: { type: String },
     metrics: {
-        totalReservations: {
-            type: Number,
-            default: 0
-        },
-        totalRevenue: {
-            type: Number,
-            default: 0
-        },
-        totalSeatsSold: {
-            type: Number,
-            default: 0
-        },
-        totalProductsSold: {
-            type: Number,
-            default: 0
-        },
-        averageOccupancy: {
-            type: Number,
-            default: 0
-        },
-        ticketRevenue: {
-            type: Number,
-            default: 0
-        },
-        productRevenue: {
-            type: Number,
-            default: 0
-        },
-        newUsers: {
-            type: Number,
-            default: 0
-        },
-        returningUsers: {
-            type: Number,
-            default: 0
-        },
-        averageTicketPrice: {
-            type: Number,
-            default: 0
-        },
-        averageSpendPerUser: {
-            type: Number,
-            default: 0
-        }
+        totalReservations: { type: String },
+        totalRevenue: { type: String },
+        totalSeatsSold: { type: String },
+        totalProductsSold: { type: String },
+        averageOccupancy: { type: String },
+        ticketRevenue: { type: String },
+        productRevenue: { type: String },
+        newUsers: { type: String },
+        returningUsers: { type: String },
+        averageTicketPrice: { type: String },
+        averageSpendPerUser: { type: String }
     },
     popularItems: {
         movies: [{
             id: String,
             title: String,
-            totalSales: Number,
-            revenue: Number
+            totalSales: String,
+            revenue: String
         }],
         products: [{
             id: String,
             name: String,
-            totalSold: Number,
-            revenue: Number
+            totalSold: String,
+            revenue: String
         }],
         timeSlots: [{
             time: String,
-            totalReservations: Number,
-            occupancyRate: Number
+            totalReservations: String,
+            occupancyRate: String
         }]
     },
     demographics: {
         ageGroups: [{
             range: String,
-            count: Number,
-            percentage: Number
+            count: String,
+            percentage: String
         }],
         genderDistribution: {
-            male: Number,
-            female: Number,
-            other: Number
+            male: String,
+            female: String,
+            other: String
         },
         vipStatusDistribution: {
-            bronze: Number,
-            silver: Number,
-            gold: Number,
-            platinum: Number
+            bronze: String,
+            silver: String,
+            gold: String,
+            platinum: String
         }
     },
     paymentMethods: [{
         method: String,
-        count: Number,
-        percentage: Number,
-        totalAmount: Number
+        count: String,
+        percentage: String,
+        totalAmount: String
     }],
     deviceUsage: [{
         type: String,
-        count: Number,
-        percentage: Number
+        count: String,
+        percentage: String
     }],
     peakHours: [{
-        hour: Number,
-        reservations: Number,
-        revenue: Number
+        hour: String,
+        reservations: String,
+        revenue: String
     }]
 }, {
     timestamps: true,

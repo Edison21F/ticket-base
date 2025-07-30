@@ -1,27 +1,17 @@
 const staffAssignment = (sequelize, type) => {
     return sequelize.define('staffAssignments', {
         idStaffAssignment: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
-        assignmentType: {
-            type: type.ENUM('cinema', 'concert', 'transport', 'general'),
-            allowNull: false
-        },
-        assignmentDate: type.DATE,
-        startTime: type.TIME,
-        endTime: type.TIME,
+        assignmentType: type.STRING,
+        assignmentDate: type.STRING,
+        startTime: type.STRING,
+        endTime: type.STRING,
         locationAssignment: type.STRING,
-        responsibilitiesAssignment: type.TEXT,
-        statusAssignment: {
-            type: type.ENUM('scheduled', 'in_progress', 'completed', 'cancelled'),
-            defaultValue: 'scheduled'
-        },
-        stateAssignment: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        responsibilitiesAssignment: type.STRING,
+        statusAssignment: type.STRING,
+        stateAssignment: type.STRING,
         createAssignment: type.STRING,
         updateAssignment: type.STRING,
     }, {

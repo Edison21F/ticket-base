@@ -1,58 +1,27 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const reviewSchema = new mongoose.Schema({
-    entityType: {
-        type: String,
-        enum: ['movie', 'cinema'],
-        required: true
-    },
-    entityId: String,
-    userId: String,
-    rating: {
-        type: Number,
-        min: 1,
-        max: 5,
-        required: true
-    },
-    title: String,
-    comment: String,
-    containsSpoilers: {
-        type: Boolean,
-        default: false
-    },
-    verified: {
-        type: Boolean,
-        default: false
-    },
-    likes: {
-        type: Number,
-        default: 0
-    },
-    dislikes: {
-        type: Number,
-        default: 0
-    },
-    reported: {
-        type: Boolean,
-        default: false
-    },
-    approved: {
-        type: Boolean,
-        default: true
-    },
-    viewingDate: Date,
+    entityType: { type: String, required: true },
+    entityId: { type: String },
+    userId: { type: String },
+    rating: { type: String, required: true },
+    title: { type: String },
+    comment: { type: String },
+    containsSpoilers: { type: String },
+    verified: { type: String },
+    likes: { type: String },
+    dislikes: { type: String },
+    reported: { type: String },
+    approved: { type: String },
+    viewingDate: { type: String },
     aspects: {
-        sound: Number,
-        image: Number,
-        comfort: Number,
-        cleanliness: Number,
-        service: Number
-    },
-    helpfulVotes: {
-        type: Number,
-        default: 0
-    },
-    reportReasons: [String]
+        sound: { type: String },
+        image: { type: String },
+        comfort: { type: String },
+        cleanliness: { type: String },
+        service: { type: String }
+    }
 }, {
     timestamps: true,
     collection: 'reviews'

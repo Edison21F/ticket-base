@@ -1,53 +1,54 @@
 const mongoose = require('mongoose');
 
+// Todos los campos se definen como string para mantener uniformidad y facilitar la manipulación de datos.
 const concertMetadataSchema = new mongoose.Schema({
     setlist: [{
-        songTitle: String,
-        duration: String,
-        order: Number,
-        isEnccore: Boolean
+        songTitle: { type: String },
+        duration: { type: String },
+        order: { type: String },
+        isEnccore: { type: String }
     }],
     bandMembers: [{
-        name: String,
-        instrument: String,
-        role: String,
-        image: String
+        name: { type: String },
+        instrument: { type: String },
+        role: { type: String },
+        image: { type: String }
     }],
     technicalRequirements: {
-        soundSystem: String,
-        lightingRig: String,
-        stageSize: String,
-        powerRequirements: String,
-        specialEffects: [String]
+        soundSystem: { type: String },
+        lightingRig: { type: String },
+        stageSize: { type: String },
+        powerRequirements: { type: String },
+        specialEffects: [{ type: String }]
     },
     merchandising: [{
-        item: String,
-        price: Number,
-        description: String,
-        image: String
+        item: { type: String },
+        price: { type: String },
+        description: { type: String },
+        image: { type: String }
     }],
     socialMedia: {
-        hashtags: [String],
+        hashtags: [{ type: String }],
         liveStream: {
-            platform: String,
-            url: String,
-            startTime: Date
+            platform: { type: String },
+            url: { type: String },
+            startTime: { type: String }
         }
     },
     weatherConsiderations: {
-        isOutdoor: Boolean,
-        weatherBackup: String,
-        temperatureRange: String
+        isOutdoor: { type: String },
+        weatherBackup: { type: String },
+        temperatureRange: { type: String }
     },
     historicalData: {
-        previousVenues: [String],
+        previousVenues: [{ type: String }],
         attendanceHistory: [{
-            date: Date,
-            venue: String,
-            attendance: Number
+            date: { type: String },
+            venue: { type: String },
+            attendance: { type: String }
         }]
     },
-    idConcertSql: String
+    idConcertSql: { type: String }
 }, {
     timestamps: true,
     collection: 'concertMetadata'

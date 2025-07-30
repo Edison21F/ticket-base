@@ -1,26 +1,16 @@
 const seat = (sequelize, type) => {
     return sequelize.define('seats', {
         idSeat: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         rowSeat: type.STRING,
-        numberSeat: type.INTEGER,
-        typeSeat: {
-            type: type.ENUM('Regular', 'VIP', 'Premium', 'Disabled'),
-            defaultValue: 'Regular'
-        },
-        additionalPrice: {
-            type: type.DECIMAL(8, 2),
-            defaultValue: 0.00
-        },
-        stateSeat: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
-        positionX: type.INTEGER,
-        positionY: type.INTEGER,
+        numberSeat: type.STRING,
+        typeSeat: type.STRING,
+        additionalPrice: type.STRING,
+        stateSeat: type.STRING,
+        positionX: type.STRING,
+        positionY: type.STRING,
         createSeat: type.STRING,
         updateSeat: type.STRING,
     }, {

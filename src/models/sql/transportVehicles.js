@@ -1,38 +1,25 @@
 const transportVehicle = (sequelize, type) => {
     return sequelize.define('transportVehicles', {
         idTransportVehicle: {
-            type: type.INTEGER,
-            autoIncrement: true,
+            type: type.STRING,
             primaryKey: true,
         },
         vehicleCode: {
             type: type.STRING,
             unique: true
         },
-        transportType: {
-            type: type.ENUM('bus', 'metro', 'flight', 'train', 'taxi', 'boat'),
-            allowNull: false
-        },
-        capacity: type.INTEGER,
+        transportType: type.STRING,
+        capacity: type.STRING,
         vehicleModel: type.STRING,
         licensePlate: type.STRING,
-        yearVehicle: type.INTEGER,
-        fuelType: {
-            type: type.ENUM('gasoline', 'diesel', 'electric', 'hybrid'),
-            defaultValue: 'gasoline'
-        },
-        facilities: type.TEXT, // JSON string
-        safetyFeatures: type.TEXT,
-        lastMaintenance: type.DATE,
-        nextMaintenance: type.DATE,
-        statusVehicle: {
-            type: type.ENUM('active', 'maintenance', 'out_of_service'),
-            defaultValue: 'active'
-        },
-        stateVehicle: {
-            type: type.BOOLEAN,
-            defaultValue: true
-        },
+        yearVehicle: type.STRING,
+        fuelType: type.STRING,
+        facilities: type.STRING,
+        safetyFeatures: type.STRING,
+        lastMaintenance: type.STRING,
+        nextMaintenance: type.STRING,
+        statusVehicle: type.STRING,
+        stateVehicle: type.STRING,
         createVehicle: type.STRING,
         updateVehicle: type.STRING,
     }, {
